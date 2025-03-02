@@ -1,3 +1,3 @@
 # Problem 1
 
-prınt(Hello word)
+prınt(Hello word1)
