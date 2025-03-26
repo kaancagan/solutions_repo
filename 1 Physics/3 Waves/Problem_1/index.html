@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Problem 1 - Physics and Mathematics</title>
+<title>Interference Patterns on a Water Surface - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Problem 1";
+        var mkdocs_page_name = "Interference Patterns on a Water Surface";
         var mkdocs_page_input_path = "1 Physics/3 Waves/Problem_1.md";
         var mkdocs_page_url = null;
       </script>
@@ -64,8 +64,14 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal current">3 Waves</a>
 <ul class="current">
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Interference Patterns on a Water Surface</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-setup">Problem Setup</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#python-simulation">Python Simulation</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -163,7 +169,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">3 Waves</li>
-<li class="breadcrumb-item active">Problem 1</li>
+<li class="breadcrumb-item active">Interference Patterns on a Water Surface</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -171,7 +177,86 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-1">Problem 1</h1>
+<h1 id="interference-patterns-on-a-water-surface">Interference Patterns on a Water Surface</h1>
+<h2 id="motivation">Motivation</h2>
+<p>When waves from multiple sources meet on a water surface, they <strong>interfere</strong> — adding or canceling each other depending on their phase. This project simulates interference patterns from <strong>coherent point sources</strong> placed at the vertices of a <strong>regular polygon</strong>.</p>
+<hr/>
+<h2 id="problem-setup">Problem Setup</h2>
+<p>We simulate wave interference from 4 coherent sources placed at the vertices of a <strong>square</strong>. Each source emits circular waves of the same frequency, amplitude, and phase. The resulting displacement at each point on the water surface is given by:</p>
+<div class="arithmatex">\[
+u(x, y, t) = \sum_{i=1}^{N} A \cdot \sin(k r_i - \omega t + \phi)
+\]</div>
+<p>Where:
+- <span class="arithmatex">\(A\)</span>: amplitude
+- <span class="arithmatex">\(k = \frac{2\pi}{\lambda}\)</span>: wave number
+- <span class="arithmatex">\(\omega = 2\pi f\)</span>: angular frequency
+- <span class="arithmatex">\(r_i\)</span>: distance from source <span class="arithmatex">\(i\)</span> to point <span class="arithmatex">\((x, y)\)</span>
+- <span class="arithmatex">\(N\)</span>: number of sources</p>
+<hr/>
+<h2 id="python-simulation">Python Simulation</h2>
+<p>import numpy as np
+import matplotlib.pyplot as plt</p>
+<h1 id="parameters">Parameters</h1>
+<p>A = 1.0               # Amplitude
+λ = 1.0               # Wavelength (meters)
+f = 1.0               # Frequency (Hz)
+ω = 2 * np.pi * f     # Angular frequency
+k = 2 * np.pi / λ     # Wave number
+φ = 0                 # Initial phase
+N = 4                 # Number of sources (square)</p>
+<h1 id="grid-setup">Grid setup</h1>
+<p>grid_size = 200
+x = np.linspace(-5, 5, grid_size)
+y = np.linspace(-5, 5, grid_size)
+X, Y = np.meshgrid(x, y)</p>
+<h1 id="polygon-vertices-square-centered-at-origin-side-length-4">Polygon vertices (square centered at origin, side length 4)</h1>
+<p>side = 4
+L = side / np.sqrt(2)
+sources = [
+    (-L, -L),
+    (-L, L),
+    (L, -L),
+    (L, L)
+]</p>
+<h1 id="time-snapshot">Time snapshot</h1>
+<p>t = 0  # You can change this or animate over time</p>
+<h1 id="superpose-waves-from-all-sources">Superpose waves from all sources</h1>
+<p>U = np.zeros_like(X)
+for (x0, y0) in sources:
+    r = np.sqrt((X - x0)<strong>2 + (Y - y0)</strong>2)
+    U += A * np.sin(k * r - ω * t + φ)</p>
+<h1 id="plotting">Plotting</h1>
+<p>plt.figure(figsize=(8, 6))
+plt.contourf(X, Y, U, levels=100, cmap='viridis')
+plt.colorbar(label='Wave Displacement')
+plt.scatter(<em>zip(</em>sources), color='red', label='Sources')
+plt.title('Wave Interference Pattern (Square Configuration)')
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.legend()
+plt.axis('equal')
+plt.grid(False)
+plt.show()</p>
+<p><img alt="alt text" src="../Ekran%20Resmi%202025-03-26%2015.32.18.png"/></p>
+<h2 id="observations">Observations</h2>
+<ul>
+<li>The <strong>bright</strong> regions correspond to <strong>constructive interference</strong> (waves reinforcing).</li>
+<li>The <strong>dark</strong> regions are areas of <strong>destructive interference</strong> (waves cancelling).</li>
+<li>The symmetric pattern arises from the <strong>square geometry</strong> of the source placement.</li>
+</ul>
+<hr/>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Try other polygons: triangle (3), pentagon (5), hexagon (6)</li>
+<li>Animate the surface: simulate time evolution with <code>t</code> varying</li>
+<li>Try random phases or incoherent sources</li>
+</ul>
+<hr/>
+<h2 id="conclusion">Conclusion</h2>
+<p>This simulation shows how simple wave equations can create beautiful and complex <strong>interference patterns</strong>. Understanding these patterns helps explain physical phenomena from sound and light to quantum waves.</p>
+<blockquote>
+<p>💧 "Where waves meet, patterns emerge."  </p>
+</blockquote>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
