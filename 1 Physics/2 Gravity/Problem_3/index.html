@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Problem 3 - Physics and Mathematics</title>
+<title>Trajectories of a Freely Released Payload Near Earth - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Problem 3";
+        var mkdocs_page_name = "Trajectories of a Freely Released Payload Near Earth";
         var mkdocs_page_input_path = "1 Physics/2 Gravity/Problem_3.md";
         var mkdocs_page_url = null;
       </script>
@@ -56,10 +56,16 @@
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../Problem_1/">Orbital Period and Orbital Radius</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../Problem_2/">Problem 2</a>
+<li class="toctree-l2"><a class="reference internal" href="../Problem_2/">Escape Velocities and Cosmic Velocities</a>
 </li>
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 3</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Trajectories of a Freely Released Payload Near Earth</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#theoretical-background">Theoretical Background</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#python-simulation-of-payload-trajectories">Python Simulation of Payload Trajectories</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -163,7 +169,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">2 Gravity</li>
-<li class="breadcrumb-item active">Problem 3</li>
+<li class="breadcrumb-item active">Trajectories of a Freely Released Payload Near Earth</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -171,11 +177,84 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-3">Problem 3</h1>
+<h1 id="trajectories-of-a-freely-released-payload-near-earth">Trajectories of a Freely Released Payload Near Earth</h1>
+<h2 id="motivation">Motivation</h2>
+<p>When a payload is released from a moving rocket near Earth, its trajectory is governed by gravity and its initial velocity. The result could be:</p>
+<ul>
+<li>A <strong>circular</strong> or <strong>elliptical</strong> orbit (if speed is below escape velocity),</li>
+<li>A <strong>parabolic</strong> trajectory (if speed equals escape velocity),</li>
+<li>A <strong>hyperbolic</strong> trajectory (if speed exceeds escape velocity),</li>
+<li>Or a <strong>reentry</strong> if the speed is insufficient to sustain orbit.</li>
+</ul>
+<p>These outcomes are critical for satellite deployment, deorbiting modules, and interplanetary missions.</p>
+<hr/>
+<h2 id="theoretical-background">Theoretical Background</h2>
+<p>The motion of a payload near Earth is governed by <strong>Newton's Law of Gravitation</strong>:</p>
+<div class="arithmatex">\[
+F = \frac{G M m}{r^2}
+\]</div>
+<p>This force causes <strong>acceleration</strong> toward Earth:</p>
+<div class="arithmatex">\[
+\vec{a} = -\frac{G M}{r^2} \hat{r}
+\]</div>
+<p>Where:
+- <span class="arithmatex">\(G\)</span> is the gravitational constant,
+- <span class="arithmatex">\(M\)</span> is Earth's mass,
+- <span class="arithmatex">\(r\)</span> is the distance to Earth's center.</p>
+<p>The trajectory depends on the initial velocity vector <span class="arithmatex">\(\vec{v}_0\)</span>. Depending on <span class="arithmatex">\(|\vec{v}_0|\)</span>, the object may fall back, orbit, or escape.</p>
+<hr/>
+<h2 id="python-simulation-of-payload-trajectories">Python Simulation of Payload Trajectories</h2>
+<p>We use numerical integration (Euler or Runge-Kutta) to simulate the path.</p>
+<p>import numpy as np
+import matplotlib.pyplot as plt</p>
+<h1 id="constants">Constants</h1>
+<p>G = 6.67430e-11  # m^3 kg^-1 s^-2
+M = 5.972e24     # kg (Earth)
+R_earth = 6.371e6  # m (Earth radius)</p>
+<h1 id="time-setup">Time setup</h1>
+<p>dt = 1           # seconds
+t_max = 10000    # total simulation time in seconds
+steps = int(t_max / dt)</p>
+<h1 id="initial-conditions">Initial conditions</h1>
+<p>altitude = 400e3  # 400 km above Earth
+r0 = np.array([R_earth + altitude, 0])  # initial position
+speeds = [5000, 7670, 11000, 11200]     # vary speed to test different paths (m/s)
+labels = ['Reentry', 'Stable Orbit', 'Escape', 'Hyperbolic']</p>
+<p>def simulate_trajectory(v0_mag):
+    r = r0.copy()
+    v = np.array([0, v0_mag])
+    traj = [r.copy()]</p>
+<pre><code>for _ in range(steps):
+    r_mag = np.linalg.norm(r)
+    a = -G * M / r_mag**3 * r
+    v += a * dt
+    r += v * dt
+    if r_mag &lt; R_earth:
+        break  # crashed
+    traj.append(r.copy())
+return np.array(traj)
+</code></pre>
+<h1 id="plot-all-trajectories">Plot all trajectories</h1>
+<p>plt.figure(figsize=(8,8))
+theta = np.linspace(0, 2*np.pi, 100)
+earth_x = R_earth * np.cos(theta)
+earth_y = R_earth * np.sin(theta)
+plt.plot(earth_x, earth_y, 'b', label='Earth')</p>
+<p>for v0, label in zip(speeds, labels):
+    traj = simulate_trajectory(v0)
+    plt.plot(traj[:,0], traj[:,1], label=f'{label} ({v0/1000:.1f} km/s)')</p>
+<p>plt.axis('equal')
+plt.grid(True)
+plt.xlabel('X Position (m)')
+plt.ylabel('Y Position (m)')
+plt.title('Payload Trajectories from 400 km Altitude')
+plt.legend()
+plt.show()</p>
+<p><img alt="alt text" src="../Ekran%20Resmi%202025-03-26%2015.26.17.png"/></p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-left" href="../Problem_2/" title="Problem 2"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-left" href="../Problem_2/" title="Escape Velocities and Cosmic Velocities"><span class="icon icon-circle-arrow-left"></span> Previous</a>
 <a class="btn btn-neutral float-right" href="../../3%20Waves/Problem_1/" title="Problem 1">Next <span class="icon icon-circle-arrow-right"></span></a>
 </div>
 <hr/>
