@@ -1,117 +1,138 @@
 # Investigating the Range as a Function of the Angle of Projection
 
-## 1. Theoretical Foundation
+## 1. Motivation
 
-### Deriving the Governing Equations
+Projectile motion, though seemingly basic, offers a deep and insightful perspective into core physics concepts. The primary objective here is to explore how the **range** of a projectile varies as a function of the **angle of projection**. 
 
-The motion of a projectile can be described by applying Newton's second law. For a projectile launched from an initial position with velocity $v_0$ at an angle $\theta$ with respect to the horizontal, we have:
+While the problem setup appears straightforward, it conceals a rich mathematical structure involving both linear and quadratic relationships. This topic is fascinating due to several influencing variables, such as:
 
-In the horizontal direction (x-axis):
-$$\frac{d^2x}{dt^2} = 0$$
-
-In the vertical direction (y-axis):
-$$\frac{d^2y}{dt^2} = -g$$
-
-Where $g$ is the acceleration due to gravity (approximately 9.81 m/s² on Earth).
-
-Integrating these equations with respect to time with initial conditions:
-- $x(0) = 0$
-- $y(0) = h$ (initial height)
-- $v_x(0) = v_0\cos(\theta)$
-- $v_y(0) = v_0\sin(\theta)$
-
-We obtain:
-
-$$x(t) = (v_0\cos\theta)t$$
-$$y(t) = h + (v_0\sin\theta)t - \frac{1}{2}gt^2$$
-
-These parametric equations describe the position of the projectile at any time $t$.
-
-### Family of Solutions
-
-The family of solutions is defined by varying the parameters:
 - Initial velocity ($v_0$)
-- Launch angle ($\theta$)
-- Initial height ($h$)
 - Gravitational acceleration ($g$)
+- Launch height ($h$)
 
-Each combination of these parameters produces a unique trajectory.
+Each of these parameters contributes to a wide array of physical trajectories — from a soccer ball's curved path to a space rocket's arc.
 
-## 2. Analysis of the Range
+---
 
-### Range Equation
+## 2. Theoretical Foundation
 
-The range $R$ is the horizontal distance traveled when the projectile returns to its initial height. To find this, we need to determine when $y(t) = h$:
+The equations governing projectile motion are derived using Newton’s Second Law:
 
-$$h + (v_0\sin\theta)t - \frac{1}{2}gt^2 = h$$
+### 2.1. Equations of Motion
 
-Simplifying:
-$$(v_0\sin\theta)t - \frac{1}{2}gt^2 = 0$$
+In an idealized scenario (neglecting air resistance), the forces acting on a projectile are:
 
-This equation has two solutions: $t = 0$ and $t = \frac{2v_0\sin\theta}{g}$
+1. Gravitational force in the vertical direction  
+2. No horizontal forces
 
-The second solution gives us the time of flight. The range is then:
+From Newton’s laws:
 
-$$R = (v_0\cos\theta) \cdot \frac{2v_0\sin\theta}{g} = \frac{v_0^2\sin(2\theta)}{g}$$
+- Horizontal acceleration: $$ a_x = 0 $$
+- Vertical acceleration: $$ a_y = -g $$
 
-This demonstrates that the range is proportional to:
-- The square of the initial velocity
-- The sine of twice the angle of projection
-- Inversely proportional to the gravitational acceleration
+Integrating over time $t$, we get the velocity components:
 
-### Optimal Angle for Maximum Range
+$$
+v_x = v_0 \cos(\theta)
+$$
 
-To find the angle that maximizes the range, we differentiate with respect to $\theta$ and set it equal to zero:
+$$
+v_y = v_0 \sin(\theta) - gt
+$$
 
-$$\frac{dR}{d\theta} = \frac{v_0^2\cos(2\theta)}{g} = 0$$
+Integrating again gives the position equations:
 
-This gives us $\cos(2\theta) = 0$, thus $2\theta = \frac{\pi}{2}$ or $\theta = \frac{\pi}{4} = 45°$
+$$
+x(t) = v_0 \cos(\theta) \cdot t
+$$
 
-Therefore, in the absence of air resistance and with a level landing surface, the maximum range is achieved at a 45° angle.
+$$
+y(t) = v_0 \sin(\theta) \cdot t - \frac{1}{2}gt^2
+$$
 
-### Effect of Initial Height
+These define the horizontal (constant velocity) and vertical (accelerated) motions.
 
-If the projectile is launched from a height $h$ above the landing surface, the range equation becomes more complex:
+---
 
-$$R = v_0\cos\theta \cdot t_{landing}$$
+### 2.2. Time of Flight
 
-Where $t_{landing}$ is the time when the projectile reaches the ground level ($y = 0$):
+To find the total time the projectile remains in the air, set $y(t) = 0$ (assuming launch and landing occur at the same height):
 
-$$h + (v_0\sin\theta)t_{landing} - \frac{1}{2}gt_{landing}^2 = 0$$
+$$
+t = \frac{2 v_0 \sin(\theta)}{g}
+$$
 
-Solving this quadratic equation:
+---
 
-$$t_{landing} = \frac{v_0\sin\theta + \sqrt{(v_0\sin\theta)^2 + 2gh}}{g}$$
+### 2.3. Range Equation
 
-This means that the range now depends on the initial height as well:
+The **range** $R$ is the total horizontal distance traveled before the projectile lands:
 
-$$R = v_0\cos\theta \cdot \frac{v_0\sin\theta + \sqrt{(v_0\sin\theta)^2 + 2gh}}{g}$$
+Using horizontal motion:
 
-## 3. Practical Applications
+$$
+R = v_0 \cos(\theta) \cdot t
+$$
 
-### Real-world Considerations
+Substitute time of flight:
 
-In practice, projectile motion is influenced by:
-- Air resistance (drag)
-- Wind
-- Varying gravitational field
-- Rotating reference frames (Coriolis effect)
-- Non-uniform terrain
+$$
+R = v_0 \cos(\theta) \cdot \frac{2 v_0 \sin(\theta)}{g}
+$$
 
-### Incorporating Air Resistance
+Apply the identity:
 
-A simple model for air resistance is to include a drag force proportional to velocity:
+$$
+\sin(2\theta) = 2 \sin(\theta) \cos(\theta)
+$$
 
-$$F_d = -bv$$
+Final equation for range:
 
-This leads to a modified set of differential equations:
+$$
+R = \frac{v_0^2 \sin(2\theta)}{g}
+$$
 
-$$\frac{d^2x}{dt^2} = -\frac{b}{m}v_x$$
-$$\frac{d^2y}{dt^2} = -g - \frac{b}{m}v_y$$
+---
 
-Where $b$ is the drag coefficient and $m$ is the mass of the projectile.
+### 2.4. Maximum Range
 
-These equations typically require numerical methods to solve.
+The range is maximized when $\sin(2\theta)$ is at its peak value (which is 1):
 
-## 4.  pyhton Implementation
-![alt text](<Ekran Resmi 2025-03-20 15.01.20.png>)
+$$
+\theta = 45^\circ
+$$
+
+Therefore, the **maximum range** occurs at a launch angle of $45^\circ$ when launch and landing heights are the same.
+
+---
+
+## 3. Range Analysis
+
+### 3.1. Dependence on Angle
+
+- The function $R(\theta)$ is symmetric around $45^\circ$
+- Angles $\theta$ and $90^\circ - \theta$ yield the same range
+
+### 3.2. Effect of Initial Velocity
+
+- The range increases **quadratically** with initial speed:
+
+$$
+R \propto v_0^2
+$$
+
+### 3.3. Effect of Gravitational Acceleration
+
+- Higher gravity (e.g., Jupiter) → **shorter range**  
+- Lower gravity (e.g., Moon) → **longer range**
+
+---
+
+## Summary
+
+Projectile range is influenced by several physical parameters, but follows a clear mathematical structure. By understanding the role of each parameter, especially the angle of projection, one can predict and optimize the trajectory of various real-world projectiles.
+
+---
+
+Visualization with Air Resistance
+![alt text](<Ekran Resmi 2025-03-29 14.20.44.png>)
